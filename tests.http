@@ -1,0 +1,30 @@
+POST http://localhost:3001/api/thoughts
+Content-Type: 'application/json'
+
+[
+	{
+		"thoughtText": "Here's a cool thought",
+		"username": "Fred",
+		"userId": "624918410ce46250bb0e69c2"
+	},
+		{
+		"thoughtText": "Are birds real?",
+		"username": "Beth",
+		"userId": "624918410ce46250bb0e69c1"
+	},
+		{
+		"thoughtText": "I wonder why the grass is green",
+		"username": "Will",
+		"userId": "624918410ce46250bb0e69c0"
+	},
+		{
+		"thoughtText": "Foxes are the cutest animals",
+		"username": "George",
+		"userId": "624918410ce46250bb0e69bf"
+	},
+		{
+		"thoughtText": "Papayas deserve more respect",
+		"username": "Kate",
+		"userId": "624918410ce46250bb0e69be"
+	}
+]

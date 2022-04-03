@@ -17,12 +17,12 @@ router
 
  // GET one, PUT, and DELETE at /api/users/:userId
 router
-  .route('/:id')
+  .route('/:userId')
   .get(getOneUser)
   .put(updateUser)
   .delete(deleteUser)
 
-// POST and DELETE at /api/users/userId/friends/friendId
+// POST and DELETE at /api/users/:userId/friends/:friendId
 router
   .route('/:userId/friends/:friendId')
   .post(addFriend)
