@@ -1,41 +1,66 @@
-// Thought
+const { Schema, model, Types } = require('mongoose')
+const { DateTime } = require('luxon')
 
-// thoughtText
-  // - String
-  // - Required
-  // - Must be between 1 and 280 characters
-  // - createdAt
+const ReactionSchema = new Schema(
+  {
+    reactionId: {
+      type: Schema.Types.ObjectId,
+      default: () => new Types.ObjectId(),
+    },
+    reactionBody: {
+      type: String,
+      required: [true, 'Please enter a reaction'],
+      trim: true,
+      maxLength: [280, 'Reaction must be less than 280 characters'],
+    },
+    username: {
+      type: String,
+      required: [true, 'Please enter a username'],
+      trim: true,
+      createdAt: DateTime.now().toISO()
+    },
+    date: {
+      type: Date,
+      default: Date.now,
+      get: DateTime => DateTime.toISO()
+    }
+  }
+)
 
-// Date
-  // - Set default value to the current timestamp
-  // - Use a getter method to format the timestamp on query
-  // - username (The user that created this thought)
+const ThoughtSchema = new Schema(
+  {
+    thoughtText: {
+      type: String,
+      required: [true, 'Please enter a thought'],
+      trim: true,
+      maxLength: [280, 'Thought must be less than 280 characters'],
+      minLength: [1, 'Thought must be at least 1 character'],
+      createdAt: DateTime.now().toISO()
+    },
+    date: {
+      type: Date,
+      default: Date.now,
+      get: DateTime => DateTime.toISO()
+    },
+    username: {
+      type: String,
+      required: [true, 'Please enter a username for the thought'],
+    },
+    reactions: [ReactionSchema]
+  },
+  {
+    toJSON: {
+      virtuals: true,
+      getters: true,
+    },
+    id: false,
+  }
+)
 
-// String
-  // - Required
-  // - reactions (These are like replies)
+ThoughtSchema.virtual('reactionCount').get(function () {
+  return this.reactions.length
+})
 
-// Array of nested documents created with the reactionSchema
-  // - Schema Settings
+const Thought = model('Thought', ThoughtSchema)
 
-// Create a virtual called reactionCount that retrieves the length of the thought's reactions array field on query.
-
-// Reaction (SCHEMA ONLY)
-
-// reactionId
-  // - Use Mongoose's ObjectId data type
-  // - Default value is set to a new ObjectId
-
-// reactionBody
-  // - String
-  // - Required
-  // - 280 character maximum
-
-// username
-  // - String
-  // - Required
-  // - createdAt
-
-// Date
-  // - Set default value to the current timestamp
-  // - Use a getter method to format the timestamp on query
+module.exports = Thought
