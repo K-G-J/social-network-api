@@ -1,5 +1,5 @@
 const { Schema, model, Types } = require('mongoose')
-const { DateTime } = require('luxon')
+const moment = require('moment')
 
 const ReactionSchema = new Schema(
   {
@@ -17,12 +17,11 @@ const ReactionSchema = new Schema(
       type: String,
       required: [true, 'Please enter a username'],
       trim: true,
-      createdAt: DateTime.now().toISO()
     },
-    date: {
+    createdAt: {
       type: Date,
       default: Date.now,
-      get: DateTime => DateTime.toISO()
+      get: (createdAtVal) => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a')
     }
   }
 )
@@ -35,12 +34,11 @@ const ThoughtSchema = new Schema(
       trim: true,
       maxLength: [280, 'Thought must be less than 280 characters'],
       minLength: [1, 'Thought must be at least 1 character'],
-      createdAt: DateTime.now().toISO()
     },
-    date: {
+    createdAt: {
       type: Date,
       default: Date.now,
-      get: DateTime => DateTime.toISO()
+      get: (createdAtVal) => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a')
     },
     username: {
       type: String,
@@ -51,9 +49,9 @@ const ThoughtSchema = new Schema(
   {
     toJSON: {
       virtuals: true,
-      getters: true,
+      getters: true
     },
-    id: false,
+    id: false
   }
 )
 

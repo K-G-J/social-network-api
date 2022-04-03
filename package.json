@@ -20,7 +20,7 @@
   "homepage": "https://github.com/K-G-J/social-network-api#readme",
   "dependencies": {
     "express": "^4.17.3",
-    "luxon": "^2.3.1",
+    "moment": "^2.29.1",
     "mongoose": "^6.2.9",
     "validator": "^13.7.0"
   }

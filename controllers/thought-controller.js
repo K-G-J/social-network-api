@@ -29,20 +29,23 @@ const thoughtController = {
         res.status(404).json({ message: 'No thought found with this id' })
       }
       res.json(dbThoughtData)
-    } catch(err) {
+    } catch (err) {
       console.log(err)
       res.status(400).json(err)
     }
   },
   addThought: async ({ params, body }, res) => {
     try {
-      const { _id } = await Thought.create(body)
-      return User.findOneAndUpdate(
-        { _id: params.userId },
-        { $push: { thoughts: _id } },
-        { new: true, runValidators: true },
-      )
-    } catch(err) {
+      const dbUserData = await User.findOne({ _id: params.userId })
+      if (!dbUserData) {
+        res.status(404).json({ message: 'No user found with this id' })
+      }
+      const dbThoughtData = await Thought.create({
+        thoughtText: body.thoughtText,
+        username: dbUserData.username,
+      })
+      res.json(dbThoughtData)
+    } catch (err) {
       console.log(err)
       res.status(400).json(err)
     }
@@ -64,7 +67,7 @@ const thoughtController = {
         res.status(404).json({ message: 'No thought found with this id' })
       }
       res.json(dbThoughtData)
-    } catch(err) {
+    } catch (err) {
       console.log(err)
       res.status(400).json(err)
     }
@@ -80,7 +83,7 @@ const thoughtController = {
         res.status(404).json({ message: 'No thought found with this id' })
       }
       res.json(dbThoughtData)
-    } catch(err) {
+    } catch (err) {
       console.log(err)
       res.status(400).json(err)
     }
@@ -94,7 +97,7 @@ const thoughtController = {
         res.status(404).json({ message: 'No thought found with this id' })
       }
       res.json(dbThoughtData)
-    } catch(err) {
+    } catch (err) {
       console.log(err)
       res.status(400).json(err)
     }
@@ -105,12 +108,15 @@ const thoughtController = {
         { _id: params.thoughtId },
         { $pull: { reactions: { _id: params.reactionId } } },
         { new: true, runValidators: true },
-      )
+      ).populate({
+        path: 'reactions',
+        select: '-__v',
+      })
       if (!dbThoughtData) {
         res.status(404).json({ message: 'No thought found with this id' })
       }
       res.json(dbThoughtData)
-    } catch(err) {
+    } catch (err) {
       console.log(err)
       res.status(400).json(err)
     }
