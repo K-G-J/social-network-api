@@ -1,6 +1,6 @@
 # Social Network API
 
-#[Demo](https://youtu.be/15xpeRgTEWI)
+# [Demo](https://youtu.be/15xpeRgTEWI)
 
 ## Description
 Example API for retireving data and performing all CRUD operations for a social networking site
