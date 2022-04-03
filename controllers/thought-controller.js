@@ -40,11 +40,13 @@ const thoughtController = {
       if (!dbUserData) {
         res.status(404).json({ message: 'No user found with this id' })
       }
-      const dbThoughtData = await Thought.create({
-        thoughtText: body.thoughtText,
-        username: dbUserData.username,
+      const newThought = await Thought.create({
+        ...body,
+        userId: dbUserData._id,
       })
-      res.json(dbThoughtData)
+      dbUserData.thoughts.push(newThought._id)
+      await dbUserData.save()
+      res.json(newThought)
     } catch (err) {
       console.log(err)
       res.status(400).json(err)

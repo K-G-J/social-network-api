@@ -1,5 +1,7 @@
 const { Schema, model } = require('mongoose')
 const { isEmail } = require('validator')
+const Thought = require('./Thought')
+const uniqueValidator = require('mongoose-unique-validator')
 
 const UserSchema = new Schema(
   {
@@ -19,15 +21,15 @@ const UserSchema = new Schema(
     thoughts: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Thought',
+        ref: 'Thought'
       },
     ],
     friends: [
       {
         type: Schema.Types.ObjectId,
         ref: 'User'
-      }
-    ]
+      },
+    ],
   },
   {
     toJSON: {
@@ -38,10 +40,17 @@ const UserSchema = new Schema(
   },
 )
 
+// UserSchema.plugin(uniqueValidator, { message: '{PATH} must be unique' });
+
+
 UserSchema.virtual('friendCount').get(function () {
-  return this.friends.length;
+  return this.friends.length
 })
 
-const User = model('User', UserSchema);
+UserSchema.post('findOneAndDelete', async (id) => {
+  await Thought.deleteMany({ userId: id })
+})
 
-module.exports = User;
+const User = model('User', UserSchema)
+
+module.exports = User
